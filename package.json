@@ -1,0 +1,27 @@
+{
+  "name": "internacionalizacion",
+  "version": "1.0.0",
+  "description": "Uniandes internacionalization API MoveON",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "tsc": "tsc",
+    "app": "electron ."
+  },
+  "author": "David Narvaez, dnarvaez27",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^6.0.5",
+    "eslint": "^6.2.2",
+    "eslint-config-standard": "^14.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1"
+  },
+  "dependencies": {
+    "typescript": "^3.5.3",
+    "xml2js": "^0.4.19"
+  }
+}
