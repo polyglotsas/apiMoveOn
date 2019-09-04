@@ -1,4 +1,4 @@
-import { Entity, Data, Method, Action } from "./models";
+import { Action, Data, Entity, Method } from "./models";
 
 const { callAPI } = require('./api');
 const settings = require('../settings');
@@ -41,7 +41,7 @@ async function getAll(entity: Entity, args: string[], page: number, rows = 50) {
   }
 }
 
-async function create(entity: Entity, data: object): Promise<{ data: any }> {
+async function save(entity: Entity, data: object): Promise<{ data: any }> {
   const postData = {
     'method': Method.QUEUE,
     'entity': entity,
@@ -63,12 +63,21 @@ async function create(entity: Entity, data: object): Promise<{ data: any }> {
 
 }
 
-async function bulkCreate(entity: Entity, data: object[]) {
+async function edit(entity: Entity, data: object): Promise<{ data: any }> {
+  if (!(`${entity}.id` in data)) {
+    throw "Entity has no id attribute";
+  }
+  return save(entity, data);
+}
+
+async function bulkSave(entity: Entity, data: object[], willEdit = false) {
   const errors: { error: any, data: object }[] = [];
   const success: { data: any }[] = [];
+  let functionToApply: (entity: Entity, data: object) => Promise<{ data: any }> = !willEdit ? save : edit;
+
   data.forEach(async o => {
     try {
-      const r = await create(entity, o);
+      const r = await functionToApply(entity, o);
       success.push(r);
     } catch (error) {
       errors.push({ error, data: o });
@@ -77,5 +86,4 @@ async function bulkCreate(entity: Entity, data: object[]) {
   return { errors, success };
 }
 
-
-module.exports = { getAll, create, bulkCreate }
+module.exports = { getAll, create: save, bulkCreate: bulkSave }
