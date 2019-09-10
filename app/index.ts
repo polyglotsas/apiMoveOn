@@ -7,6 +7,13 @@ const keyPath = settings.certificate.privateKey;
 const certPath = settings.certificate.certificate;
 
 
+const asyncForEach = async (array: any[], cbk: (d: any, n: number, a: any[]) => any) => {
+  for (let i = 0; i < array.length; i++) {
+    await cbk(array[i], i, array);
+  }
+};
+
+
 async function getAll(entity: Entity, args: string[], page: number, rows = 50) {
   if (rows > 50) {
     throw `Max row per page is 50. Actual ${rows}`;
@@ -70,20 +77,21 @@ async function edit(entity: Entity, data: object): Promise<{ data: any }> {
   return save(entity, data);
 }
 
-async function bulkSave(entity: Entity, data: object[], willEdit = false) {
-  const errors: { error: any, data: object }[] = [];
-  const success: { data: any }[] = [];
+async function bulkSave(entity: Entity, data: object[], willEdit = false): Promise<{ errors: any[], success: any[] }> {
+  const errors: { index: number, error: any, data: object }[] = [];
+  const success: { index: number, data: any }[] = [];
   let functionToApply: (entity: Entity, data: object) => Promise<{ data: any }> = !willEdit ? save : edit;
 
-  data.forEach(async o => {
+  await asyncForEach(data, async (o, i) => {
     try {
       const r = await functionToApply(entity, o);
-      success.push(r);
+      success.push({ index: i, ...r });
     } catch (error) {
-      errors.push({ error, data: o });
+      errors.push({ index: i, error, data: o });
     }
   });
+
   return { errors, success };
 }
 
-module.exports = { getAll, create: save, bulkCreate: bulkSave }
+module.exports = { getAll, create: save, bulkSave }

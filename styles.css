@@ -34,7 +34,8 @@ body {
 }
 
 #action-container > div > .mdc-form-field > div > label {
-  margin: auto;
+  padding: 0.7em 0;
+  cursor: pointer;
 }
 
 #action-container > div:nth-child(2) > .mdc-button {
@@ -53,11 +54,19 @@ body {
 }
 
 #state-container {
-  padding: 50px;
+  padding: 50px 50px 100px;
 }
 
 #state-container > .mdc-data-table {
   width: 100%;
+}
+
+#state-container > div.hidden {
+  display: none;
+}
+
+#state-container > .cssload-spin-box {
+  top: 60px;
 }
 
 .mdc-data-table__header-row > th {
@@ -66,10 +75,13 @@ body {
 
 #footer {
   bottom: 0;
-  position: absolute;
-  height: 5vh;
+  position: fixed;
+  height: 30px;
   width: 100%;
   text-align: right;
+  background-color: white;
+  box-shadow: 0 -1px 7px -5px;
+  padding: 5px 0 0;
 }
 
 #footer > span {
@@ -87,4 +99,22 @@ body {
   height: 12px;
   width: 12px;
   display: inline-block;
+}
+
+table > tbody#table-body-entities > tr {
+  text-align: center;
+}
+
+button.mdc-fab {
+  position: fixed;
+  bottom: 40px;
+  right: 10px;
+}
+
+button.mdc-fab > span {
+  color: black;
+}
+
+button.mdc-fab.hidden {
+  display: none;
 }

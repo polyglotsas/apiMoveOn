@@ -3,33 +3,70 @@
 const api = require('./build/index');
 const fs = require("fs");
 
+const doc = document;
+
+const selectFileBtn = doc.getElementById('btn-select-file');
+const selectFile = doc.getElementById('input-select-file');
+const tableBody = doc.getElementById('table-body-entities');
+const polyglotFooter = doc.getElementById('polyglot-footer');
+const btnCrear = doc.getElementById('btn-crear');
+const btnEditar = doc.getElementById('btn-editar');
+const selectEntities = doc.getElementById('select-entities');
+const fabSend = doc.getElementById('fab-send');
+const tableContainer = doc.querySelector('#state-container');
+
+
 let actualState = 0;
+let actualEntity = undefined;
+let data;
 
-let selectFileBtn = document.getElementById('btn-select-file');
-let selectFile = document.getElementById('input-select-file');
+const isNumber = (key) => {
+  const data = [
+    'person.country_of_birth.id',
+    'person.gender.id',
+    'person.nationality.id',
+    'person.preferred_language.id',
+    'person.second_nationality.id',
+  ];
 
-document.getElementById('polyglot-footer')
-  .addEventListener('click', () => {
-    require('electron').shell.openExternal('https://polyglot.site');
-  });
+  return data.includes(key);
+};
 
-document.getElementById('btn-crear')
-  .addEventListener('click', () => {
-    if (actualState !== 1) {
-      actualState = 1;
-      selectFileBtn.classList.remove('disabled');
-      selectFile.removeAttribute('disabled');
+const zip = (keys, values) => {
+  return keys.reduce((o, v, i) => {
+    if (v.trim() !== 'id') {
+      if (isNumber(v)) {
+        o[v] = +values[i];
+      } else {
+        o[v] = values[i];
+      }
     }
-  });
+    return o;
+  }, {});
+};
 
-document.getElementById('btn-editar')
-  .addEventListener('click', () => {
-    if (actualState !== 2) {
-      actualState = 2;
-      selectFileBtn.classList.remove('disabled');
-      selectFile.removeAttribute('disabled');
-    }
-  });
+polyglotFooter.addEventListener('click', () => {
+  require('electron').shell.openExternal('https://polyglot.site');
+});
+
+btnCrear.addEventListener('click', () => {
+  if (actualState !== 1) {
+    actualState = 1;
+    validateToLoad();
+  }
+});
+
+btnEditar.addEventListener('click', () => {
+  if (actualState !== 2) {
+    actualState = 2;
+    validateToLoad();
+  }
+});
+
+selectEntities.addEventListener('change', () => {
+  actualEntity = selectEntities.value;
+  validateToLoad();
+});
 
 selectFile.addEventListener("change", function () {
   const file = this.files[0];
@@ -42,54 +79,97 @@ selectFile.addEventListener("change", function () {
   });
 
   const processFile = (content) => {
-    console.log(content);
-  }
+    const rows = content.split('\n').map(s => s.split(';')).filter(r => r.length !== 0 && r[0] !== '');
+    const header = rows.shift();
+    data = rows.map(r => ({ id: r[0], ...zip(header, r) }));
+
+    while (tableBody.firstChild) {
+      tableBody.removeChild(tableBody.firstChild);
+    }
+
+    data.forEach(d => {
+      const tr = doc.createElement('tr');
+      tr.classList.add('mdc-data-table__row');
+      const tdEntity = doc.createElement('td');
+      tdEntity.classList.add('mdc-data-table__cell');
+      tdEntity.append(doc.createTextNode(d.id));
+      const tdState = doc.createElement('td');
+      tdState.classList.add('mdc-data-table__cell');
+      tdState.append('Pendiente');
+
+      tr.append(tdEntity);
+      tr.append(tdState);
+
+      tableBody.append(tr);
+    });
+
+    fabSend.classList.remove('hidden');
+  };
 });
 
+fabSend.addEventListener('click', () => {
+  const tableRows = doc.querySelectorAll('table > tbody > tr > td:nth-child(2)');
 
-(async function () {
+  const doRequest = (content) => {
+    (async () => {
+      const { errors, success } = await api.bulkSave(actualEntity, content, actualState === 2);
 
-  async function testCreate() {
-    const createUser = {
-      'customfield10': "test",
-      // 'entity': "person",
-      'person.country_of_birth.id': 15,
-      'person.date_of_birth': "28/04/1980",
-      'person.email': "mro@uniandes.edu.co",
-      'person.fax': "1234567",
-      // 'person.first_name': "Mariana",
-      'person.gender.id': 2,
-      'person.groups': "1,2,3,4",
-      'person.iddoc_expired_on': "10/06/1979",
-      'person.iddoc_issued_by': "fabian wulf",
-      'person.iddoc_issued_on': "10/06/1978",
-      'person.iddoc_number': "1234567",
-      'person.iddoc_type': "1",
-      'person.matriculation_id': "123456",
-      'person.mobile': "1234567",
-      'person.national.id': "123456",
-      'person.nationality.id': 1,
-      'person.phone': "12345",
-      'person.phone_2': "123467",
-      'person.place_of_birth': "Pasto, NA",
-      'person.preferred_language.id': 2,
-      'person.privacy_consent': "1",
-      'person.remarks': "Person remarks",
-      'person.second_nationality.id': 2,
-      'person.surname': "Rodriguez",
-      'person.title': "Ms"
-    };
-    const r = await api.create("person", createUser);
-    console.log(r);
-  }
+      errors.forEach(e => tableRows[e.index].textContent = 'Error');
+      success.forEach(s => tableRows[s.index].textContent = 'Correcto');
 
-  async function testGet() {
-    const fields = ["person.first_name", "person.surname", "person.date_of_birth", "person.matriculation_ida"];
-    console.log(await api.getAll('person', fields, 2));
-  }
+      tableContainer.children[0].classList.remove('hidden');
+      tableContainer.children[1].classList.add('hidden');
+    })();
+  };
 
-  // await testGet();
+  tableContainer.children[0].classList.add('hidden');
+  tableContainer.children[1].classList.remove('hidden');
 
-  // console.log('start');
-  // document.getElementById('but').addEventListener('click', _ => console.log('hola'));
+  doRequest(data.map(d => {
+    delete d['id'];
+    return d;
+  }));
+
 });
+
+function validateToLoad() {
+  if (actualState !== 0 && actualEntity) {
+    selectFileBtn.classList.remove('disabled');
+    selectFile.removeAttribute('disabled');
+  }
+}
+
+// -----------------------------------------------------------------
+
+
+(() => {
+  const data = [
+    'Person',
+    'Contact',
+    'Stay',
+    'Catalogue Course',
+    'Address',
+    'Relation',
+    'Framework',
+    'Contact Role',
+    'Institution',
+    'Grant',
+    'Course Unit',
+    'Degree Program',
+    'Relation Institution',
+    'Relation Contact',
+    'Relation Content Type',
+    'Academic Year',
+    'Subject Area',
+    'Funding',
+    'Payment'
+  ].sort();
+
+  data.forEach(entity => {
+    let option = doc.createElement('option');
+    option.setAttribute('value', entity.split(' ').join('-').toLowerCase());
+    option.appendChild(doc.createTextNode(entity));
+
+    selectEntities.appendChild(option);
+  });
+})();

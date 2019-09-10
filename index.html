@@ -3,12 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <title>Uniandes - Internacionalización</title>
-    <link type="text/css" rel="stylesheet" href="styles.css" />
 
+    <link type="text/css" rel="stylesheet" href="styles.css" />
     <link
       href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="loader.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
     <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
@@ -42,9 +43,18 @@
         </div>
       </div>
       <div>
-        <label id="btn-select-file" class="mdc-button mdc-button--raised disabled" >
+        <div class="mdc-select">
+          <i class="mdc-select__dropdown-icon"></i>
+          <select class="mdc-select__native-control" id="select-entities">
+            <option value="" disabled selected></option>
+          </select>
+          <!-- <label class="mdc-floating-label">Seleccione la entidad</label> -->
+          <div class="mdc-line-ripple"></div>
+        </div>
+
+        <label id="btn-select-file" class="mdc-button mdc-button--raised disabled">
           <span class="mdc-button__label">Seleccionar Archivo</span>
-          <input id="input-select-file" type="file" style="display: none" disabled/>
+          <input id="input-select-file" type="file" style="display: none" disabled />
         </label>
       </div>
     </div>
@@ -57,22 +67,22 @@
               <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Estado</th>
             </tr>
           </thead>
-          <tbody class="mdc-data-table__content">
-            <!-- <tr class="mdc-data-table__row">
-                  <td class="mdc-data-table__cell">Frozen yogurt</td>
-                  <td class="mdc-data-table__cell mdc-data-table__cell--numeric">24</td>
-                </tr> -->
-          </tbody>
+          <tbody class="mdc-data-table__content" id="table-body-entities"></tbody>
         </table>
       </div>
+      <div class="cssload-spin-box hidden"></div>
     </div>
     <div id="footer">
       <span class="mdc-floating-label" id="polyglot-footer">
-        Powered By: 
-        <span></span> 
+        Powered By:
+        <span></span>
       </span>
       <!-- <div></div> -->
     </div>
+
+    <button class="mdc-fab hidden" aria-label="done" id="fab-send">
+      <span class="mdc-fab__icon material-icons">done</span>
+    </button>
 
     <!-- You can also require other files to run in this process -->
     <!-- <script src="./renderer.js"></script> -->

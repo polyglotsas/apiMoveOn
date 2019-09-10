@@ -6,6 +6,15 @@ export enum Method {
 
 export enum Entity {
   PERSON = 'person',
+  CONTACT = 'contact',
+  STAY = 'stay',
+  CATALOGUE_COURSE = 'catalogue-course',
+  ADDRESS = 'address',
+  RELATION = 'relation',
+  FRAMEWORK = 'framework',
+  CONTACT_ROLE = 'contact-role',
+  INSTITUTION = 'institution',
+  GRANT = 'grant',
   COURSE_UNIT = 'course-unit',
   DEGREE_PROGRAM = 'degree-program',
   RELATION_INSTITUTION = 'relation-institution',
