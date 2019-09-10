@@ -1,15 +1,78 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <meta charset="UTF-8" />
+    <title>Uniandes - Internacionalización</title>
+    <link type="text/css" rel="stylesheet" href="styles.css" />
+
+    <link
+      href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
   </head>
   <body>
-    <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
-    <button id="but">Click</button>
+    <div id="header"><div></div></div>
+    <div id="action-container">
+      <div>
+        <div class="mdc-form-field">
+          <div id="btn-crear">
+            <div class="mdc-radio">
+              <input class="mdc-radio__native-control" type="radio" id="radio-1" name="radios" />
+              <div class="mdc-radio__background">
+                <div class="mdc-radio__outer-circle"></div>
+                <div class="mdc-radio__inner-circle"></div>
+              </div>
+            </div>
+            <label for="radio-1">Crear</label>
+          </div>
+
+          <div id="btn-editar">
+            <div class="mdc-radio">
+              <input class="mdc-radio__native-control" type="radio" id="radio-2" name="radios" />
+              <div class="mdc-radio__background">
+                <div class="mdc-radio__outer-circle"></div>
+                <div class="mdc-radio__inner-circle"></div>
+              </div>
+            </div>
+            <label for="radio-2">Editar</label>
+          </div>
+        </div>
+      </div>
+      <div>
+        <label id="btn-select-file" class="mdc-button mdc-button--raised disabled" >
+          <span class="mdc-button__label">Seleccionar Archivo</span>
+          <input id="input-select-file" type="file" style="display: none" disabled/>
+        </label>
+      </div>
+    </div>
+    <div id="state-container">
+      <div class="mdc-data-table">
+        <table class="mdc-data-table__table" aria-label="Dessert calories">
+          <thead>
+            <tr class="mdc-data-table__header-row">
+              <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Entidad</th>
+              <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Estado</th>
+            </tr>
+          </thead>
+          <tbody class="mdc-data-table__content">
+            <!-- <tr class="mdc-data-table__row">
+                  <td class="mdc-data-table__cell">Frozen yogurt</td>
+                  <td class="mdc-data-table__cell mdc-data-table__cell--numeric">24</td>
+                </tr> -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div id="footer">
+      <span class="mdc-floating-label" id="polyglot-footer">
+        Powered By: 
+        <span></span> 
+      </span>
+      <!-- <div></div> -->
+    </div>
 
     <!-- You can also require other files to run in this process -->
     <!-- <script src="./renderer.js"></script> -->

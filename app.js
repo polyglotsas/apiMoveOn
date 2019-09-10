@@ -1,21 +1,51 @@
 "use strict";
 
 const api = require('./build/index');
+const fs = require("fs");
 
-document.getElementById('but').addEventListener('click', ()=> {
-  (async function(){
-    async function testGet() {
-      const fields = ["person.first_name", "person.surname", "person.date_of_birth", "person.matriculation_id"];
-      console.log(await api.getAll('person', fields, 2));
+let actualState = 0;
+
+let selectFileBtn = document.getElementById('btn-select-file');
+let selectFile = document.getElementById('input-select-file');
+
+document.getElementById('polyglot-footer')
+  .addEventListener('click', () => {
+    require('electron').shell.openExternal('https://polyglot.site');
+  });
+
+document.getElementById('btn-crear')
+  .addEventListener('click', () => {
+    if (actualState !== 1) {
+      actualState = 1;
+      selectFileBtn.classList.remove('disabled');
+      selectFile.removeAttribute('disabled');
     }
-  
-    try {
-      await testGet();
-    } catch (error) {
-      console.error(error);
+  });
+
+document.getElementById('btn-editar')
+  .addEventListener('click', () => {
+    if (actualState !== 2) {
+      actualState = 2;
+      selectFileBtn.classList.remove('disabled');
+      selectFile.removeAttribute('disabled');
     }
-  })();
+  });
+
+selectFile.addEventListener("change", function () {
+  const file = this.files[0];
+
+  fs.readFile(file.path, 'utf8', (err, data) => {
+    if (err) {
+      throw err;
+    }
+    processFile(data);
+  });
+
+  const processFile = (content) => {
+    console.log(content);
+  }
 });
+
 
 (async function () {
 
@@ -62,4 +92,4 @@ document.getElementById('but').addEventListener('click', ()=> {
 
   // console.log('start');
   // document.getElementById('but').addEventListener('click', _ => console.log('hola'));
-})();
+});

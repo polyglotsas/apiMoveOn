@@ -1,0 +1,90 @@
+:root {
+  --mdc-theme-secondary: #fff200 !important;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#header {
+  padding: 20px;
+}
+
+#header > div {
+  background-image: url('assets/imgs/uniandes-logo.png');
+  height: 50px;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+#action-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 20px;
+}
+
+#action-container > div > .mdc-form-field {
+  display: grid;
+}
+
+#action-container > div > .mdc-form-field > div {
+  display: flex;
+  margin: auto;
+}
+
+#action-container > div > .mdc-form-field > div > label {
+  margin: auto;
+}
+
+#action-container > div:nth-child(2) > .mdc-button {
+  background-color: #fff200;
+  color: black;
+}
+
+#action-container > div:nth-child(2) > .mdc-button.disabled {
+  background-color: lightgray;
+  color: gray;
+  box-shadow: none;
+}
+
+#action-container > div:nth-child(2) > .mdc-button.disabled:hover {
+  box-shadow: none;
+}
+
+#state-container {
+  padding: 50px;
+}
+
+#state-container > .mdc-data-table {
+  width: 100%;
+}
+
+.mdc-data-table__header-row > th {
+  text-align: center;
+}
+
+#footer {
+  bottom: 0;
+  position: absolute;
+  height: 5vh;
+  width: 100%;
+  text-align: right;
+}
+
+#footer > span {
+  padding: 0 10px;
+  position: relative;
+  font-size: 0.8em;
+  cursor: pointer;
+}
+
+#footer > span > span {
+  background-image: url('assets/imgs/polyglot-logo.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 12px;
+  width: 12px;
+  display: inline-block;
+}
