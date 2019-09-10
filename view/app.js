@@ -1,6 +1,6 @@
 "use strict";
 
-const api = require('./build/index');
+const api = require('../build/index');
 const fs = require("fs");
 
 const doc = document;

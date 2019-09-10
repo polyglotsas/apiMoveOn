@@ -2,10 +2,10 @@
   "name": "internacionalizacion",
   "version": "1.0.0",
   "description": "Uniandes internacionalization API MoveON",
-  "main": "index.js",
+  "main": "./view/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
+    "start": "node ./view/index.js",
     "tsc": "tsc",
     "app": "electron ."
   },

@@ -17,7 +17,7 @@ const createWindow = () => {
   });
 
   // and load the index.html of the app.
-  mainWindow.loadFile('index.html');
+  mainWindow.loadFile('./view/index.html');
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
