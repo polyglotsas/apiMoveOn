@@ -19,75 +19,60 @@ const tableContainer = doc.querySelector('#state-container');
 let actualState = 0;
 let actualEntity = undefined;
 let data;
+let rowHandlerFunctions = {};
 
-const isNumber = (key) => {
-  const data = [
-    'person.country_of_birth.id',
-    'person.gender.id',
-    'person.nationality.id',
-    'person.preferred_language.id',
-    'person.second_nationality.id',
-  ];
-
-  return data.includes(key);
-};
 
 const zip = (keys, values) => {
   return keys.reduce((o, v, i) => {
     if (v.trim() !== 'id') {
-      if (isNumber(v)) {
-        o[v] = +values[i];
-      } else {
-        o[v] = values[i];
-      }
+      o[v] = values[i];
     }
     return o;
   }, {});
 };
 
-polyglotFooter.addEventListener('click', () => {
-  require('electron').shell.openExternal('https://polyglot.site');
-});
+const validateToLoad = () => {
+  if (actualState !== 0 && actualEntity) {
+    selectFileBtn.classList.remove('disabled');
+    selectFile.removeAttribute('disabled');
+  }
+};
 
-btnCrear.addEventListener('click', () => {
-  if (actualState !== 1) {
-    actualState = 1;
+const changeState = (nState) => {
+  if (actualState !== nState) {
+    actualState = nState;
     validateToLoad();
   }
-});
+};
 
-btnEditar.addEventListener('click', () => {
-  if (actualState !== 2) {
-    actualState = 2;
-    validateToLoad();
+const clearNode = (node) => {
+  while (node.firstChild) {
+    node.removeChild(node.firstChild);
   }
-});
+};
 
-selectEntities.addEventListener('change', () => {
-  actualEntity = selectEntities.value;
+const parseDataFile = (content) => {
+  const rows = content.split('\n').map(s => s.split(';')).filter(r => r.length !== 0 && r[0] !== '');
+  const header = rows.shift();
+  return rows.map(r => ({ id: r[0], ...zip(header, r) }));
+};
+
+const rowClickHandler = (data) => {
+  return () => {
+    console.log(data);
+  };
+};
+
+const changeEntity = (entity) => {
+  actualEntity = entity;
   validateToLoad();
-});
+};
 
-selectFile.addEventListener("change", function () {
+function fileEventHandler() {
   const file = this.files[0];
 
-  fs.readFile(file.path, 'utf8', (err, data) => {
-    if (err) {
-      throw err;
-    }
-    processFile(data);
-  });
-
   const processFile = (content) => {
-    const rows = content.split('\n').map(s => s.split(';')).filter(r => r.length !== 0 && r[0] !== '');
-    const header = rows.shift();
-    data = rows.map(r => ({ id: r[0], ...zip(header, r) }));
-
-    while (tableBody.firstChild) {
-      tableBody.removeChild(tableBody.firstChild);
-    }
-
-    data.forEach(d => {
+    const addRow = (d) => {
       const tr = doc.createElement('tr');
       tr.classList.add('mdc-data-table__row');
       const tdEntity = doc.createElement('td');
@@ -100,44 +85,74 @@ selectFile.addEventListener("change", function () {
       tr.append(tdEntity);
       tr.append(tdState);
 
-      tableBody.append(tr);
-    });
+      return tr;
+    };
+
+    data = parseDataFile(content);
+
+    clearNode(tableBody);
+
+    data.forEach(d => tableBody.append(addRow(d)));
 
     fabSend.classList.remove('hidden');
+    rowHandlerFunctions = {};
   };
-});
 
-fabSend.addEventListener('click', () => {
+  fs.readFile(file.path, 'utf8', (err, data) => {
+    if (err) {
+      throw err;
+    }
+    processFile(data);
+  });
+}
+
+const sendRequest = () => {
   const tableRows = doc.querySelectorAll('table > tbody > tr > td:nth-child(2)');
+
+  const setRowState = (i, state, data) => {
+    tableRows[i].textContent = state;
+    if (i in rowHandlerFunctions) {
+      tableRows[i].parentElement.removeEventListener('click', rowHandlerFunctions[i]);
+    }
+    rowHandlerFunctions[i] = rowClickHandler(data);
+    tableRows[i].parentElement.addEventListener('click', rowHandlerFunctions[i]);
+  };
+
+  const toggleLoader = (toggle) => {
+    const functions = toggle ? ['add', 'remove'] : ['remove', 'add'];
+
+    tableContainer.children[0].classList[functions[0]]('hidden');
+    tableContainer.children[1].classList[functions[1]]('hidden');
+  };
 
   const doRequest = (content) => {
     (async () => {
       const { errors, success } = await api.bulkSave(actualEntity, content, actualState === 2);
 
-      errors.forEach(e => tableRows[e.index].textContent = 'Error');
-      success.forEach(s => tableRows[s.index].textContent = 'Correcto');
+      errors.forEach(e => setRowState(e.index, 'Error', e));
+      success.forEach(s => setRowState(s.index, 'Correcto', s));
 
-      tableContainer.children[0].classList.remove('hidden');
-      tableContainer.children[1].classList.add('hidden');
+      toggleLoader(false);
     })();
   };
 
-  tableContainer.children[0].classList.add('hidden');
-  tableContainer.children[1].classList.remove('hidden');
+  toggleLoader(true);
+  doRequest(data.map(d => { delete d['id']; return d; }));
+};
 
-  doRequest(data.map(d => {
-    delete d['id'];
-    return d;
-  }));
+const openLink = (link) => {
+  return () => require('electron').shell.openExternal(link);
+};
 
-});
+btnCrear.addEventListener('click', () => changeState(1));
+btnEditar.addEventListener('click', () => changeState(2));
+selectEntities.addEventListener('change', () => changeEntity(selectEntities.value));
 
-function validateToLoad() {
-  if (actualState !== 0 && actualEntity) {
-    selectFileBtn.classList.remove('disabled');
-    selectFile.removeAttribute('disabled');
-  }
-}
+selectFile.addEventListener("change", fileEventHandler);
+fabSend.addEventListener('click', sendRequest);
+
+polyglotFooter.addEventListener('click', openLink('https://polyglot.site'));
+
 
 // -----------------------------------------------------------------
 
