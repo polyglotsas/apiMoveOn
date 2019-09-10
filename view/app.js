@@ -110,7 +110,14 @@ const sendRequest = () => {
   const tableRows = doc.querySelectorAll('table > tbody > tr > td:nth-child(2)');
 
   const setRowState = (i, state, data) => {
-    tableRows[i].textContent = state;
+    const icon = doc.createElement('i');
+    icon.classList.add('material-icons');
+    icon.textContent = state === 'Error' ? 'close' : 'check';
+    tableRows[i].textContent = '';
+    tableRows[i].appendChild(icon)
+    tableRows[i].appendChild(doc.createTextNode(state));
+    tableRows[i].parentElement.classList.add(state);
+
     if (i in rowHandlerFunctions) {
       tableRows[i].parentElement.removeEventListener('click', rowHandlerFunctions[i]);
     }
