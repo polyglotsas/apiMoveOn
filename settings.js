@@ -438,8 +438,13 @@ const places = {
 };
 
 const gender = {
-  'Male': 3,
-  'Female': 4,
+  'Not Known': 1,
+  'Male': 2,
+  'Female': 3,
+  'Not applicable': 4,
+  'I prefer not to say': 5,
+  'Non-binary': 6,
+  'Other': 7
 };
 
 const lists = {

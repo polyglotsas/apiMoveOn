@@ -29,6 +29,6 @@
             "error",
             "as-needed"
         ],
-        "no-console": "off"
+        "no-console": "warn"
     }
 }

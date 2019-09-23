@@ -116,7 +116,7 @@ class Table {
   setData(data, onclick) {
     if (data.length > 0) {
       this.setHeader(Object.keys(data[0]));
-      this.setBody(data, onclick);
+      this.setBody(data, onclick || (() => console.log(data)));
     } else {
       this.clearTable();
     }
@@ -173,7 +173,7 @@ class Request {
       if (type in lists && data.v in lists[type]) {
         let key = data.k;
         if (!data['k'].endsWith('.id')) { //TODO: Check if key with .id
-          key = `${data.k}.id`; 
+          key = `${data.k}.id`;
         }
         return { k: key, v: lists[type][data.v].toString() };
       }
@@ -212,7 +212,6 @@ class State {
     this.data = [];
     this.tableRef = tableRef;
     this.rowClickHandler = () => { };
-
 
     btnCrear.addEventListener('click', () => this.changeState(1));
     btnEditar.addEventListener('click', () => this.changeState(2));
@@ -265,6 +264,7 @@ class State {
         fabSend.classList.remove('hidden');
         this.files = undefined;
       });
+      this.value = '';
     };
   }
 

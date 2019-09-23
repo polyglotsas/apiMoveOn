@@ -103,7 +103,8 @@ body {
   display: inline-block;
 }
 
-table > tbody#table-body-entities > tr {
+table > * > tr,
+table > * > tr > * {
   text-align: center;
 }
 
@@ -121,7 +122,8 @@ button.mdc-fab.hidden {
   display: none;
 }
 
-.mdc-data-table__header-cell {
+thead > tr > .mdc-data-table__header-cell {
   text-transform: capitalize !important;
   font-weight: bold !important;
+  text-align: center;
 }
