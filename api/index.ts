@@ -13,6 +13,12 @@ const asyncForEach = async (array: any[], cbk: (d: any, n: number, a: any[]) => 
   }
 };
 
+const removeKeysWithoutValue = (obj: object): object => {
+  return Object.entries(obj)
+    .filter(([k, v]) => v !== '')
+    .reduce((o: any, e: any): object => { o[e[0]] = e[1]; return o; }, {});
+};
+
 
 async function getAll(entity: Entity, args: string[], page: number, rows = 50) {
   if (rows > 50) {
@@ -53,7 +59,7 @@ async function save(entity: Entity, data: object): Promise<{ data: any }> {
     'method': Method.QUEUE,
     'entity': entity,
     'action': Action.SAVE,
-    'data': JSON.stringify({ 'entity': entity, ...data })
+    'data': JSON.stringify({ 'entity': entity, ...removeKeysWithoutValue(data) })
   };
 
   try {
