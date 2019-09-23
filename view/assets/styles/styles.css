@@ -1,5 +1,7 @@
 :root {
   --mdc-theme-secondary: #fff200 !important;
+  --loader-1: #4f4d49;
+  --loader-2: #dfdfdf;
 }
 
 body {
@@ -12,7 +14,7 @@ body {
 }
 
 #header > div {
-  background-image: url('assets/imgs/uniandes-logo.png');
+  background-image: url('../imgs/uniandes-logo.png');
   height: 50px;
   background-repeat: no-repeat;
   background-size: contain;
@@ -92,7 +94,7 @@ body {
 }
 
 #footer > span > span {
-  background-image: url('assets/imgs/polyglot-logo.png');
+  background-image: url('../imgs/polyglot-logo.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

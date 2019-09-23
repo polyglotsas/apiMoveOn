@@ -438,7 +438,8 @@ const places = {
 };
 
 const gender = {
-
+  'Male': 3,
+  'Female': 4,
 };
 
 const lists = {
@@ -450,22 +451,24 @@ const lists = {
   'country': places,
   'country.name': places, // TODO Check
   'home_country.name': places, // TODO Check
+  'gender': gender,
+  'gender.id': gender
 };
 
 module.exports = {
-  "url": {
-    "hostname": "uniandes05-api.moveonca.com",
-    "path": "/restService/index.php?version=3.0"
+  'url': {
+    'hostname': 'uniandes05-api.moveonca.com',
+    'path': '/restService/index.php?version=3.0'
   },
-  "ContentType": "application/x-www-form-urlencoded",
-  "certificate": {
-    "privateKey": "C:/Users/dnarv/Desktop/Polyglot/QS/llavePrivada.key",
-    "certificate": "C:/Users/dnarv/Desktop/Polyglot/QS/certificado.crt",
-    "passphrase": "uniandes"
+  'ContentType': 'application/x-www-form-urlencoded',
+  'certificate': {
+    'privateKey': 'C:/Users/dnarv/Desktop/Polyglot/QS/llavePrivada.key',
+    'certificate': 'C:/Users/dnarv/Desktop/Polyglot/QS/certificado.crt',
+    'passphrase': 'uniandes'
   },
-  "app_content": {
-    "separator": "\t",
-    "encoding": "utf16le"
+  'fileSettings': {
+    'separator': '\t',
+    'encoding': 'utf16le'
   },
   lists
-}
+};
