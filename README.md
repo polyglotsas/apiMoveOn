@@ -35,3 +35,19 @@ npm run app
 └─ settings.js    # Settings of the app for API requests
 
 ```
+
+## Certificate
+* Generate
+  ```
+    openssl req -x509 -newkey rsa:4096 -keyout llavePrivada.key -out certificado.crt -days 365
+  ```
+
+* Get Certificate Serial
+  ```
+    openssl x509 -serial -noout -in certificado.crt
+  ```
+
+* Check Validity
+  ```
+    openssl x509 -enddate -noout -in certificado.crt
+  ```

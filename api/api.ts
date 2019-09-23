@@ -55,6 +55,7 @@ async function callAPI(postData: Data, keyPath: string, certPath: string) {
     method: 'post',
     key: fs.readFileSync(keyPath),
     cert: fs.readFileSync(certPath),
+    passphrase: settings.certificate.passphrase,
     headers: {
       'Content-Type': settings.ContentType,
       'Content-Length': stringData.length

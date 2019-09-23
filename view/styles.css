@@ -118,3 +118,8 @@ button.mdc-fab > span {
 button.mdc-fab.hidden {
   display: none;
 }
+
+.mdc-data-table__header-cell {
+  text-transform: capitalize !important;
+  font-weight: bold !important;
+}

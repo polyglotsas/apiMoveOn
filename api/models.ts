@@ -43,6 +43,7 @@ export interface Options {
   method: string;
   key: any;
   cert: any;
+  passphrase: any,
   headers: {
     'Content-Type': string;
     'Content-Length': string;
