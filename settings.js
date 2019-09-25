@@ -1,3 +1,5 @@
+const path = require('path');
+
 const langs = {
   'Abkhazian': 4,
   'Afar': 5,
@@ -467,8 +469,8 @@ module.exports = {
   },
   'ContentType': 'application/x-www-form-urlencoded',
   'certificate': {
-    'privateKey': 'C:/Users/dnarv/Desktop/Polyglot/QS/llavePrivada.key',
-    'certificate': 'C:/Users/dnarv/Desktop/Polyglot/QS/certificado.crt',
+    'privateKey': path.join(process.cwd(), 'certificate', 'llavePrivada.key'),
+    'certificate': path.join(process.cwd(), 'certificate', 'certificado.crt'),
     'passphrase': 'uniandes'
   },
   'fileSettings': {

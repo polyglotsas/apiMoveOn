@@ -8,26 +8,16 @@
   width: 15px;
   height: 15px;
   border-radius: 100%;
-  box-shadow: 15px 15px var(--loader1),
-              -15px 15px var(--loader2),
-              -15px -15px var(--loader1),
-              15px -15px var(--loader2);
-  -o-box-shadow: 15px 15px var(--loader1),
-                -15px 15px var(--loader2),
-                -15px -15px var(--loader1),
-                15px -15px var(--loader2);
-  -ms-box-shadow: 15px 15px var(--loader1),
-                  -15px 15px var(--loader2),
-                  -15px -15px var(--loader1),
-                  15px -15px var(--loader2);
-  -webkit-box-shadow: 15px 15px var(--loader1),
-                      -15px 15px var(--loader2),
-                      -15px -15px var(--loader1),
-                      15px -15px var(--loader2);
-  -moz-box-shadow: 15px 15px var(--loader1),
-                  -15px 15px var(--loader2),
-                  -15px -15px var(--loader1),
-                  15px -15px var(--loader2);
+  box-shadow: 15px 15px var(--loader-1), -15px 15px var(--loader-2), -15px -15px var(--loader-1),
+    15px -15px var(--loader-2);
+  -o-box-shadow: 15px 15px var(--loader-1), -15px 15px var(--loader-2), -15px -15px var(--loader-1),
+    15px -15px var(--loader-2);
+  -ms-box-shadow: 15px 15px var(--loader-1), -15px 15px var(--loader-2), -15px -15px var(--loader-1),
+    15px -15px var(--loader-2);
+  -webkit-box-shadow: 15px 15px var(--loader-1), -15px 15px var(--loader-2),
+    -15px -15px var(--loader-1), 15px -15px var(--loader-2);
+  -moz-box-shadow: 15px 15px var(--loader-1), -15px 15px var(--loader-2),
+    -15px -15px var(--loader-1), 15px -15px var(--loader-2);
   animation: cssload-spin ease infinite 4.6s;
   -o-animation: cssload-spin ease infinite 4.6s;
   -ms-animation: cssload-spin ease infinite 4.6s;
@@ -38,111 +28,99 @@
 @keyframes cssload-spin {
   0%,
   100% {
-    box-shadow: 15px 15px var(--loader1),
-                -15px 15px var(--loader2),
-                -15px -15px var(--loader1),
-                15px -15px var(--loader2);
+    box-shadow: 15px 15px var(--loader-1), -15px 15px var(--loader-2), -15px -15px var(--loader-1),
+      15px -15px var(--loader-2);
   }
   25% {
-    box-shadow: -15px 15px var(--loader2),
-                -15px -15px var(--loader1),
-                15px -15px var(--loader2),
-                15px 15px var(--loader1);
+    box-shadow: -15px 15px var(--loader-2), -15px -15px var(--loader-1), 15px -15px var(--loader-2),
+      15px 15px var(--loader-1);
   }
   50% {
-    box-shadow: -15px -15px var(--loader1),
-                15px -15px var(--loader2),
-                15px 15px var(--loader1),
-                -15px 15px var(--loader2);
+    box-shadow: -15px -15px var(--loader-1), 15px -15px var(--loader-2), 15px 15px var(--loader-1),
+      -15px 15px var(--loader-2);
   }
   75% {
-    box-shadow: 15px -15px var(--loader2),
-                15px 15px var(--loader1),
-                -15px 15px var(--loader2),
-                -15px -15px var(--loader1);
+    box-shadow: 15px -15px var(--loader-2), 15px 15px var(--loader-1), -15px 15px var(--loader-2),
+      -15px -15px var(--loader-1);
   }
 }
 
 @-o-keyframes cssload-spin {
   0%,
   100% {
-    box-shadow: 15px 15px var(--loader1),
-                -15px 15px var(--loader2),
-                -15px -15px var(--loader1),
-                15px -15px var(--loader2);
+    box-shadow: 15px 15px var(--loader-1), -15px 15px var(--loader-2), -15px -15px var(--loader-1),
+      15px -15px var(--loader-2);
   }
   25% {
-    box-shadow: -15px 15px var(--loader2),
-                -15px -15px var(--loader1),
-                15px -15px var(--loader2),
-                15px 15px var(--loader1);
+    box-shadow: -15px 15px var(--loader-2), -15px -15px var(--loader-1), 15px -15px var(--loader-2),
+      15px 15px var(--loader-1);
   }
   50% {
-    box-shadow: -15px -15px var(--loader1),
-                15px -15px var(--loader2),
-                15px 15px var(--loader1),
-                -15px 15px var(--loader2);
+    box-shadow: -15px -15px var(--loader-1), 15px -15px var(--loader-2), 15px 15px var(--loader-1),
+      -15px 15px var(--loader-2);
   }
   75% {
-    box-shadow: 15px -15px var(--loader2),
-                15px 15px var(--loader1),
-                -15px 15px var(--loader2),
-                -15px -15px var(--loader1);
+    box-shadow: 15px -15px var(--loader-2), 15px 15px var(--loader-1), -15px 15px var(--loader-2),
+      -15px -15px var(--loader-1);
   }
 }
 
 @-ms-keyframes cssload-spin {
   0%,
   100% {
-    box-shadow: 15px 15px var(--loader1),
-                -15px 15px var(--loader2),
-                -15px -15px var(--loader1),
-                15px -15px var(--loader2);
+    box-shadow: 15px 15px var(--loader-1), -15px 15px var(--loader-2), -15px -15px var(--loader-1),
+      15px -15px var(--loader-2);
   }
   25% {
-    box-shadow: -15px 15px var(--loader2),
-                -15px -15px var(--loader1),
-                15px -15px var(--loader2),
-                15px 15px var(--loader1);
+    box-shadow: -15px 15px var(--loader-2), -15px -15px var(--loader-1), 15px -15px var(--loader-2),
+      15px 15px var(--loader-1);
   }
   50% {
-    box-shadow: -15px -15px var(--loader1),
-                15px -15px var(--loader2),
-                15px 15px var(--loader1),
-                -15px 15px var(--loader2);
+    box-shadow: -15px -15px var(--loader-1), 15px -15px var(--loader-2), 15px 15px var(--loader-1),
+      -15px 15px var(--loader-2);
   }
   75% {
-    box-shadow: 15px -15px var(--loader2),
-                15px 15px var(--loader1),
-                -15px 15px var(--loader2),
-                -15px -15px var(--loader1);
+    box-shadow: 15px -15px var(--loader-2), 15px 15px var(--loader-1), -15px 15px var(--loader-2),
+      -15px -15px var(--loader-1);
   }
 }
 
 @-webkit-keyframes cssload-spin {
   0%,
   100% {
-    box-shadow: 15px 15px var(--loader1),
-                -15px 15px var(--loader2),
-                -15px -15px var(--loader1),
-                15px -15px var(--loader2);
+    box-shadow: 15px 15px var(--loader-1), -15px 15px var(--loader-2), -15px -15px var(--loader-1),
+      15px -15px var(--loader-2);
   }
   25% {
-    box-shadow: -15px 15px var(--loader2),
-                -15px -15px var(--loader1),
-                15px -15px var(--loader2),
-                15px 15px var(--loader1);
+    box-shadow: -15px 15px var(--loader-2), -15px -15px var(--loader-1), 15px -15px var(--loader-2),
+      15px 15px var(--loader-1);
   }
   50% {
-    box-shadow: -15px -15px var(--loader1),
-                15px -15px var(--loader2),
-                15px 15px var(--loader1),
-                -15px 15px var(--loader2);
+    box-shadow: -15px -15px var(--loader-1), 15px -15px var(--loader-2), 15px 15px var(--loader-1),
+      -15px 15px var(--loader-2);
   }
   75% {
-    box-shadow: 15px -15px var(--loader2),
-                15px 15px var(--loader1),
-                -15px 15px var(--loader2),
-                -15px -15px var(--loader1);
+    box-shadow: 15px -15px var(--loader-2), 15px 15px var(--loader-1), -15px 15px var(--loader-2),
+      -15px -15px var(--loader-1);
+  }
+}
+
+@-moz-keyframes cssload-spin {
+  0%,
+  100% {
+    box-shadow: 15px 15px var(--loader-1), -15px 15px var(--loader-2), -15px -15px var(--loader-1),
+      15px -15px var(--loader-2);
+  }
+  25% {
+    box-shadow: -15px 15px var(--loader-2), -15px -15px var(--loader-1), 15px -15px var(--loader-2),
+      15px 15px var(--loader-1);
+  }
+  50% {
+    box-shadow: -15px -15px var(--loader-1), 15px -15px var(--loader-2), 15px 15px var(--loader-1),
+      -15px 15px var(--loader-2);
+  }
+  75% {
+    box-shadow: 15px -15px var(--loader-2), 15px 15px var(--loader-1), -15px 15px var(--loader-2),
+      -15px -15px var(--loader-1);
   }
 }

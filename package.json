@@ -22,6 +22,9 @@
     "eslint-plugin-standard": "^4.0.1"
   },
   "dependencies": {
+    "@material/dialog": "^3.2.0",
+    "@material/snackbar": "^3.2.0",
+    "@material/textfield": "^3.2.0",
     "@types/xml2js": "^0.4.4",
     "typescript": "^3.5.3",
     "xml2js": "^0.4.19"

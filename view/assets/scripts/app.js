@@ -2,10 +2,17 @@
 
 const fs = require('fs');
 const api = require('../../../build/index');
+const { MDCTextField } = require('@material/textfield');
+const { MDCDialog } = require('@material/dialog');
+const { MDCSnackbar } = require('@material/snackbar');
 const { fileSettings, lists } = require('../../../settings');
+const { generateCertificate } = require('./certificates');
+
 
 // eslint-disable-next-line no-undef
 const doc = document;
+// eslint-disable-next-line no-undef
+const ls = localStorage;
 
 const selectFileBtn = doc.getElementById('btn-select-file');
 const selectFile = doc.getElementById('input-select-file');
@@ -16,7 +23,9 @@ const btnEditar = doc.getElementById('btn-editar');
 const selectEntities = doc.getElementById('select-entities');
 const fabSend = doc.getElementById('fab-send');
 const tableContainer = doc.querySelector('#state-container');
-
+const userEmailInput = doc.getElementById('text-field-user-email');
+const certSerialInput = doc.getElementById('cert-serial');
+const copySerialBtn = doc.getElementById('copy-btn');
 
 const clearNode = (node) => {
   while (node.firstChild) {
@@ -106,6 +115,7 @@ class Table {
       tr.addEventListener('click', onclick);
     }
     tr.classList.add('mdc-data-table__row');
+
     Object.values(rowData)
       .forEach(v => {
         this.addCell(tr, v);
@@ -115,8 +125,13 @@ class Table {
 
   setData(data, onclick) {
     if (data.length > 0) {
+      this.tableRows.forEach((e, i) => {
+        e.removeEventListener('click', this.rowHandlerFunctions[i]);
+      });
+      this.tableRows = [];
+      this.rowHandlerFunctions = {};
       this.setHeader(Object.keys(data[0]));
-      this.setBody(data, onclick || (() => console.log(data)));
+      this.setBody(data, onclick || console.log);
     } else {
       this.clearTable();
     }
@@ -137,7 +152,7 @@ class Table {
 
     const icon = doc.createElement('i');
     icon.classList.add('material-icons');
-    icon.textContent = state === 'Error' ? 'close' : 'check';
+    icon.textContent = (state === 'Error') ? 'close' : 'check';
     stateCell.textContent = '';
     stateCell.appendChild(icon);
     stateCell.appendChild(doc.createTextNode(state));
@@ -258,7 +273,15 @@ class State {
         if (self.actualState === 1) {
           self.tableRef.setData(self.data.map(d => ({ id: d.id, estado: 'Pendiente' })));
         } else {
-          self.tableRef.setData(self.data);
+
+          self.tableRef.setData(self.data.map(d => {
+            let es = Object.entries(d);
+            es.splice(1, 0, ['Estado', 'Pendiente']);
+            return es.reduce((o, e) => {
+              o[e[0]] = e[1];
+              return o;
+            }, {});
+          }));
         }
 
         fabSend.classList.remove('hidden');
@@ -288,40 +311,119 @@ class State {
 // -----------------------------------
 
 
-new State(new Table(tableNode));
-
-
 (() => {
-  const data = [
-    'Person',
-    'Contact',
-    'Stay',
-    'Catalogue Course',
-    'Address',
-    'Relation',
-    'Framework',
-    'Contact Role',
-    'Institution',
-    'Grant',
-    'Course Unit',
-    'Degree Program',
-    'Relation Institution',
-    'Relation Contact',
-    'Relation Content Type',
-    'Academic Year',
-    'Subject Area',
-    'Funding',
-    'Payment'
-  ].sort();
+  new State(new Table(tableNode));
 
-  data.forEach(entity => {
-    let option = doc.createElement('option');
-    option.setAttribute('value', entity.split(' ').join('-').toLowerCase());
-    option.appendChild(doc.createTextNode(entity));
+  const isCertificateValid = () => {
+    if (ls.getItem('cert-val')) {
+      return (new Date(ls.getItem('cert-val')).getTime() > new Date().getTime());
+    }
+    return false;
+  };
 
-    selectEntities.appendChild(option);
+  const copySerial = () => {
+    certSerialInput.select();
+    certSerialInput.setSelectionRange(0, 99999); /*For mobile devices*/
+    doc.execCommand('copy');
+    snackbar.open();
+  };
+
+  // Adds the options to the dropdown
+  (() => {
+    const data = [
+      'Person',
+      'Contact',
+      'Stay',
+      'Catalogue Course',
+      'Address',
+      'Relation',
+      'Framework',
+      'Contact Role',
+      'Institution',
+      'Grant',
+      'Course Unit',
+      'Degree Program',
+      'Relation Institution',
+      'Relation Contact',
+      'Relation Content Type',
+      'Academic Year',
+      'Subject Area',
+      'Funding',
+      'Payment'
+    ].sort();
+
+    data.forEach(entity => {
+      let option = doc.createElement('option');
+      option.setAttribute('value', entity.split(' ').join('-').toLowerCase());
+      option.appendChild(doc.createTextNode(entity));
+
+      selectEntities.appendChild(option);
+    });
+  })();
+
+  // Material Design initialization
+  const f1 = new MDCTextField(doc.querySelector('.mdc-text-field'));
+  const f2 = new MDCTextField(doc.querySelector('.mdc-text-field#l2'));
+  const snackbar = new MDCSnackbar(doc.querySelector('.mdc-snackbar'));
+  const dialog = new MDCDialog(doc.querySelector('.mdc-dialog'));
+  snackbar.timeoutMs = 4000;
+
+  // Sets value for the dialog input or opens dialog
+  (() => {
+    const userEmail = ls.getItem('user-email');
+    if (userEmail) {
+      f1.value = userEmail;
+      f2.value = ls.getItem('cert-serial');
+    } else {
+      dialog.open();
+    }
+  })();
+  // If cert validity is not valid, generates a new one if exists the email or opens dialog
+  (() => {
+    if (!isCertificateValid()) {
+      const userEmail = ls.getItem('user-email');
+      if (userEmail) {
+        (async () => {
+          const serial = await generateCertificate(userEmail);
+          const now = new Date();
+          now.setFullYear(now.getFullYear() + 1);
+          ls.setItem('cert-val', now);
+          ls.setItem('cert-serial', serial);
+        })();
+      } else {
+        dialog.open();
+      }
+    }
+  })();
+
+  doc.getElementById('user-sett').addEventListener('click', () => dialog.open());
+  dialog.listen('MDCDialog:closed', (action) => {
+    if (!userEmailInput.value) {
+      dialog.open();
+    } else {
+      if (action.detail.action === 'save' && (userEmailInput.value !== ls.getItem('user-email') || !isCertificateValid())) {
+        ls.setItem('user-email', userEmailInput.value);
+        (async () => {
+          const serial = await generateCertificate(userEmailInput.value);
+          const now = new Date();
+          now.setFullYear(now.getFullYear() + 1);
+          ls.setItem('cert-val', now);
+          ls.setItem('cert-serial', serial);
+
+          f2.value = serial;
+
+          dialog.open();
+          copySerial();
+        })();
+      }
+    }
   });
-})();
 
-const openLink = (link) => () => require('electron').shell.openExternal(link);
-polyglotFooter.addEventListener('click', openLink('https://polyglot.site'));
+  copySerialBtn.addEventListener('click', copySerial);
+
+
+
+  // Adds polyglot link
+  const openLink = (link) => () => require('electron').shell.openExternal(link);
+  polyglotFooter.addEventListener('click', openLink('https://polyglot.site'));
+})();

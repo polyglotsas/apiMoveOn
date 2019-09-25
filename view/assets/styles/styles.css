@@ -1,5 +1,10 @@
 :root {
+  --mdc-theme-primary: #fff200 !important;
   --mdc-theme-secondary: #fff200 !important;
+  --mdc-theme-on-primary: #212121 !important;
+  --mdc-theme-on-secondary: #212121 !important;
+  /* --mdc-theme-surface: red !important; */
+  --mdc-theme-background: red !important;
   --loader-1: #4f4d49;
   --loader-2: #dfdfdf;
 }
@@ -11,13 +16,35 @@ body {
 
 #header {
   padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
-#header > div {
+#header > div:nth-child(1) {
   background-image: url('../imgs/uniandes-logo.png');
   height: 50px;
   background-repeat: no-repeat;
   background-size: contain;
+}
+
+#header > div:nth-child(2) {
+  background-image: url('../imgs/MOU-logo.png');
+  height: 50px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: right;
+  margin-right: 30px;
+}
+
+#header > button {
+  position: absolute;
+  padding: 0px 20px;
+  top: 0px;
+  right: 0px;
+  background-color: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  outline: none;
 }
 
 #action-container {
@@ -126,4 +153,58 @@ thead > tr > .mdc-data-table__header-cell {
   text-transform: capitalize !important;
   font-weight: bold !important;
   text-align: center;
+}
+
+#modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#modal > #modal-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: white;
+  box-shadow: 0 1px 10px -5px;
+  padding: 20px;
+  border-radius: 5px;
+  transform: translate(-50%, -50%);
+}
+
+#modal > #bg {
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+#modal > #modal-container > #modal-btns {
+  text-align: right;
+  padding: 20px 0 0;
+}
+
+.mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
+  color: var(--mdc-theme-on-primary) !important;
+}
+
+.mdc-text-field {
+  display: block !important;
+  margin: 15px 0;
+}
+
+#copy-btn {
+  background-color: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  outline: none;
+}
+
+#copy-btn > i {
+  font-size: 1.2em;
+}
+
+.mdc-dialog__content > div:nth-child(2) {
+  display: flex;
 }
