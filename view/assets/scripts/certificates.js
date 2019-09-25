@@ -1,5 +1,6 @@
 const path = require('path');
 const child = require('child_process').execFile;
+const { appDir } = require('../../../settings');
 
 const spawnProcess = async (process, params) => {
   return new Promise((resolve, reject) => {
@@ -23,14 +24,18 @@ const generateCertificate = async (email) => {
     'CN': 'www.uniandes.edu.co',
     'emailAddress': email
   };
-  const openSSLDir = path.join(process.cwd(), 'external', 'openSSL');
-  const createCert = ['req', '-x509', '-newkey', 'rsa:2048', '-keyout', 'certificate/llavePrivada.key', '-out', 'certificate/certificado.crt', '-days', '365', '-nodes', '-config', path.join(openSSLDir, 'openssl.cnf'),
+  const openSSLDir = path.join(appDir, 'external', 'openSSL');
+  const createCert = ['req', '-x509', '-newkey', 'rsa:2048',
+    '-keyout', path.join(appDir, 'certificate/llavePrivada.key'),
+    '-out', path.join(appDir, 'certificate/certificado.crt'),
+    '-days', '365', '-nodes',
+    '-config', path.join(openSSLDir, 'openssl.cnf'),
     '-subj', `/${Object.entries(options).map(e => `${e[0]}=${e[1]}`).join('/')}/`];
   const openSSL = path.join(openSSLDir, 'openssl.exe');
 
   await spawnProcess(openSSL, createCert);
 
-  const serialCert = ['x509', '-serial', '-noout', '-in', 'certificate/certificado.crt'];
+  const serialCert = ['x509', '-serial', '-noout', '-in', path.join(appDir, 'certificate/certificado.crt')];
   const serial = await spawnProcess(openSSL, serialCert);
   return serial.substring(7);
 };

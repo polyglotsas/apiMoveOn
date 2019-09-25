@@ -1,5 +1,7 @@
 const path = require('path');
 
+const appDir = path.join(process.cwd(), 'resources', 'app');
+
 const langs = {
   'Abkhazian': 4,
   'Afar': 5,
@@ -463,14 +465,15 @@ const lists = {
 };
 
 module.exports = {
+  appDir,
   'url': {
     'hostname': 'uniandes05-api.moveonca.com',
     'path': '/restService/index.php?version=3.0'
   },
   'ContentType': 'application/x-www-form-urlencoded',
   'certificate': {
-    'privateKey': path.join(process.cwd(), 'certificate', 'llavePrivada.key'),
-    'certificate': path.join(process.cwd(), 'certificate', 'certificado.crt'),
+    'privateKey': path.join(appDir, 'certificate', 'llavePrivada.key'),
+    'certificate': path.join(appDir, 'certificate', 'certificado.crt'),
     'passphrase': 'uniandes'
   },
   'fileSettings': {
