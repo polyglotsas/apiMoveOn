@@ -389,6 +389,11 @@ class State {
           now.setFullYear(now.getFullYear() + 1);
           ls.setItem('cert-val', now);
           ls.setItem('cert-serial', serial);
+
+          f2.value = serial;
+
+          dialog.open();
+          copySerial();
         })();
       } else {
         dialog.open();
