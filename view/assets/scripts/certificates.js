@@ -23,9 +23,10 @@ const generateCertificate = async (email) => {
     'CN': 'www.uniandes.edu.co',
     'emailAddress': email
   };
-  const createCert = ['req', '-x509', '-newkey', 'rsa:2048', '-keyout', 'certificate/llavePrivada.key', '-out', 'certificate/certificado.crt', '-days', '365', '-nodes',
+  const openSSLDir = path.join(process.cwd(), 'external', 'openSSL');
+  const createCert = ['req', '-x509', '-newkey', 'rsa:2048', '-keyout', 'certificate/llavePrivada.key', '-out', 'certificate/certificado.crt', '-days', '365', '-nodes', '-config', path.join(openSSLDir, 'openssl.cnf'),
     '-subj', `/${Object.entries(options).map(e => `${e[0]}=${e[1]}`).join('/')}/`];
-  const openSSL = path.join(process.cwd(), 'external', 'openSSL', 'openssl.exe');
+  const openSSL = path.join(openSSLDir, 'openssl.exe');
 
   await spawnProcess(openSSL, createCert);
 
